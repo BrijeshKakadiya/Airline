@@ -1,0 +1,168 @@
+// Here you can add other styles
+.fs-16px {
+    font-size: 16px !important;
+}
+
+.fs-14px {
+    font-size: 14px !important;
+}
+
+.fs-10px {
+    font-size: 10px !important;
+}
+
+.fs-12px {
+    font-size: 12px !important;
+}
+
+.ml-8px {
+    margin-left: 8px;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.hr-color {
+    color: #ff0000;
+    font-weight: 600;
+}
+
+.margin-1-12rem {
+    margin: 1rem 12rem;
+}
+
+.ml-28px {
+    margin-left: 28px !important;
+}
+
+.ml-24px {
+    margin-left: 24px !important;
+}
+
+.ml-10px {
+    margin-left: 10px !important;
+}
+
+.ml-6px {
+    margin-left: 6px !important;
+}
+
+.mt-8px {
+    margin-top: 8px;
+}
+
+.pt-0px {
+    padding-top: 0 !important;
+}
+
+.p-9-5 {
+    padding: 9px 5px !important;
+}
+
+.box {
+    border: 2px solid #000;
+    border-radius: 12px;
+}
+.box-2 {
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+.mt-1 {
+    margin-top: 1px !important;
+}
+.ml-5 {
+    margin-left: 5px;
+}
+.mt-1rem{
+    margin-top: 1rem !important;
+}
+.mb-1rem{
+    margin-bottom: 1rem !important;
+}
+.w-70 {
+    width: 70% !important;
+}
+.boarder-left-2px-solid-red {
+    border-left: 2px solid red;
+}
+.boarder-right-2px-solid-red {
+    border-right: 2px solid red;
+}
+.c-red {
+    color: #ff0000;
+}
+.cursor-pointer:hover {
+    cursor: pointer;
+}
+.text-decoration-none{
+    text-decoration: none !important;
+}
+.c-black {
+    color: #000 !important;
+}
+.ml-2rem {
+    margin-left: 2rem !important;
+}
+.mt-10px {
+    margin-top: 10px !important;
+}
+
+/* custom styles */
+.a li:first-child::marker {
+    color: #3278ca;
+}
+
+.a li:nth-child(2)::marker {
+    color: #ff8839;
+}
+
+.a li:nth-child(3)::marker {
+    color: #3fb8b9;
+}
+
+
+// 
+
+.seating-chart {
+    text-align: center;
+}
+
+.seat {
+    width: 30px;
+    height: 27px;
+    margin: 5px;
+    line-height: 25px;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.first-class {
+    background-color: #3278ca;
+}
+
+.business-class {
+    background-color:#ff8839;
+    /* Bootstrap warning color */
+}
+
+.economy-class {
+    background-color: #3fb8b9;
+    /* Bootstrap info color */
+}
+
+.restroom {
+    width: 100px;
+    height: 50px;
+    margin: 5px;
+    line-height: 50px;
+    background-color: #6c757d;
+    /* Bootstrap secondary color */
+    color: white;
+    border-radius: 5px;
+}
+
+.--cui-gutter-x {
+    --cui-gutter-x: 0rem !important;
+}
