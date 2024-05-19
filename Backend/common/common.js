@@ -1,113 +1,102 @@
-const crypto = require("crypto");
-var multer = require("multer");
-var mongodb = require("mongodb");
-const CONSTANT = require("./constant");
-const ALGO = CONSTANT.ALGO;
-const ENCRYPTION_KEY = CONSTANT.ENCRYPTION_KEY; // Must be 256 bits (32 characters)
-const IV_LENGTH = CONSTANT.IV_LENGTH; // For AES, this is always 16
-
-
+const crypto = require('crypto');
+const ALGO = 'aes-256-cbc';
+const ENCRYPTION_KEY = 'rbzYbCrwd4M2fFutsdCtexHANdBTK9hs'; // Must be 256 bits (32 characters)
+const IV_LENGTH = 16; // For AES, this is always 16
+const multer = require('multer');
+const path = require('path');
+var mongodb= require('mongodb');
+const fs = require('fs');
 
 
 exports.decryptPassword = _decryptPassword;
-exports.encryptPassword = _encryptPassword; 
+exports.encryptPassword = _encryptPassword;
+exports.isValidObjectId = _isValidObjectId;
 exports.isUndefinedOrNull = _isUndefinedOrNull;
-exports.generateHashCode = _generateHashCode;
-exports.isObjEmpty = _isObjEmpty;
-exports.isValidObjId = _isValidObjId;
 exports.isValidateEmail = _isValidateEmail;
-exports.generateOTP = _generateOTP;
+exports.fileUpload = _fileUpload;
 
-// password encrypt
 function _encryptPassword(text, callback) {
-  let iv = crypto.randomBytes(IV_LENGTH);
-  let cipher = crypto.createCipheriv(ALGO, Buffer.from(ENCRYPTION_KEY), iv);
-  let encrypted = cipher.update(text);
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-  callback(iv.toString("hex") + ":" + encrypted.toString("hex"));
+    let iv = crypto.randomBytes(IV_LENGTH);
+    let cipher = crypto.createCipheriv(ALGO, Buffer.from(ENCRYPTION_KEY), iv);
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    callback(iv.toString('hex') + ':' + encrypted.toString('hex'));
 }
 
-// password decrypt
 function _decryptPassword(text, callback) {
-  let textParts = text.split(":");
-  let iv = Buffer.from(textParts.shift(), "hex");
-  let encryptedText = Buffer.from(textParts.join(":"), "hex");
-  let decipher = crypto.createDecipheriv(ALGO, Buffer.from(ENCRYPTION_KEY), iv);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  callback(decrypted.toString());
+    console.log('text',typeof text);
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv(ALGO, Buffer.from(ENCRYPTION_KEY), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    callback(decrypted.toString());
 }
-
-// to generate hashcode
-function _generateHashCode() {
-  return crypto.randomBytes(16).toString("hex");
-}
-
-// to generate email html
-function _getOtpVerificationHTML(OTP) {
-  return '<html> <body><p style="font-size: 14px;">You are receiving this because you (or someone else) have requested the activate your account..</p><p style="font-size: 14px;font-weight: 900;"><strong>OTP : ' +
-  OTP +
-  '</strong></p><p style="font-size: 14px;">If you did not request this, please ignore this email..</p> </body></html>';
+//Check id is valid object id or not    
+function _isValidObjectId(id) {
+    return mongodb.ObjectID.isValid(id);
 }
 
 //Check Undefined and null value
 function _isUndefinedOrNull(value) {
-  if (typeof value === CONSTANT.UNDEFINED || value == null || value == "") {
-    return true;
-  } else {
-    return false;
-  }
+    if (value == "undefined" || value == null || value == "") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /*
-TYPE:GET
-To check id is valid or not.
-*/
-function _isValidObjId(id) {
-  if (!_isUndefinedOrNull(id)) {
-    return mongodb.ObjectID.isValid(id);
-  } else {
-    return false;
-  }
-}
-
-/*
-Email Validation function
+Validate email address
 */
 function _isValidateEmail(email) {
-  const regex = CONSTANT.EMAIL_REGEX;
-  return regex.test(String(email).toLowerCase());
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 /*
-TYPE:GET
-To value is undefined or null.
+upload photo
 */
-function _isObjEmpty(obj) {
-  return obj == null || !Object.keys(obj).length;
-}
+function _fileUpload(folder, _fileName, req, res, callback) {
+    var files = [];
+    var file_name;
+    var type;
+    var storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, folder)
+        },
+        filename: (req, file, cb) => {
+            const match = ["image/png", "image/jpeg"];
+            var date = Date.now();
+            if (_fileName == "") {
+                cb(null, file.fieldname + '-' + date + path.extname(file.originalname));
+                file_name = file.fieldname + '-' + date + path.extname(file.originalname)
+            } else {
+                cb(null, _fileName + path.extname(file.originalname));
+                file_name = _fileName + path.extname(file.originalname)
+            }
 
-/*
-Generate uniqueID  function
-*/
-function _UUID() {
-  var result = "";
-  var characters = CONSTANT.CHARACTERS;
-  var charactersLength = characters.length;
-  for (var i = 0; i < 10; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+            type = file.fieldname;
+            if (type == 'photo') {
+                files.push({ type: type, filename: folder + file_name });
+            }
+        }
+    });
+    
+    var upload = multer({ storage: storage }).fields([
+        { name: 'photo' },
+        { name: 'Id' }
+    ]);
 
-/*
-OTP generator( 8 digit) function
-*/
-function _generateOTP() {
-  var digits = "0123456789";
-  let OTP = "";
-  for (let i = 0; i < 6; i++) {
-    OTP += digits[Math.floor(Math.random() * 10)];
-  }
-  return OTP;
+    // to declare some path to store your converted image
+    upload(req, res, (err, i) => {
+        if (err) {
+            callback(err, []);
+        } else {
+            var res_files = [];
+            res_files.push(files);
+            callback(null, files);
+        }
+    });
 }

@@ -1,72 +1,50 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const http = require('http');
-const fs = require('fs');
-const mongoose = require('mongoose');
+const express = require('express')
+const cors = require('cors')
+const app = express()
 const PORT = 4000;
-var path = require('path');
-var static = require("serve-static");
-const CONSTANT = require("./common/constant");
-const dotenv = require('dotenv'); 
-dotenv.config()
+const bodyParser = require('body-parser');
+const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config();
 
+let User = require('./route/user.route')
 
-//Import Routing Files
-// const User = require("./routes/user.route")
-// const Customer = require("./routes/customer.route")
-
-// create server
-var server = http.createServer(app)
-
-app.use(static(path.join(__dirname, 'public')))
-app.use(express.static('public'))
-// app.use("/upload_attachments", express.static(path.join(__dirname, "/upload_attachments")));
-// app.use('/logo', express.static(path.join(__dirname, '/logo')));
-
+//create express app
+var http = require('http');
+var server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use(bodyParser.json({ limit: '50mb', extended: true }))
-app.use(cors())
+    // parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+// parse requests of content-type - application/json
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
+app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    if ('OPTIONS' == req.method) {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  if ('OPTIONS' == req.method) {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-})
-
-// set routes with server
-// app.use("/user", User)
-// app.use("/customer", Customer)
-
-//config database
-const database = require("./common/db");
+//configuration of database
+const database = require('./config/database');
 mongoose.Promise = global.Promise;
 
-// connecting to database
+//connecting to database
 mongoose.connect(database.DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log("Successfully connected to the database")
-}).catch(err => {
-  console.log('Could not connect to the database. Exiting now...', err);
-  process.exit();
-})
+   useNewUrlParser: true, 
+}).then(
+    () => { console.log('Database is connected') },
+    err => { console.log('Can not connect to the database' + err) }
+);
 
-server.listen(PORT, '0.0.0.0', function () {
-  if (!fs.existsSync(CONSTANT.DIR)) {
-    fs.mkdirSync(CONSTANT.DIR, {
-      recursive: true
-    });
-  }
-  console.log("Express http server listening on *:" + PORT);
-})
+app.use('/user', User);
+
+
+server = app.listen(PORT, '0.0.0.0', function() {
+    console.log("Server is running on Port: " + PORT);
+});
