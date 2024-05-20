@@ -14,6 +14,19 @@ exports.isValidObjectId = _isValidObjectId;
 exports.isUndefinedOrNull = _isUndefinedOrNull;
 exports.isValidateEmail = _isValidateEmail;
 exports.fileUpload = _fileUpload;
+exports.isValidObjId = _isValidObjId;
+
+/*
+TYPE:GET
+To check id is valid or not.
+*/
+function _isValidObjId(id) {
+    if (!_isUndefinedOrNull(id)) {
+      return mongodb.ObjectID.isValid(id);
+    } else {
+      return false;
+    }
+  }
 
 function _encryptPassword(text, callback) {
     let iv = crypto.randomBytes(IV_LENGTH);

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Users = mongoose.Schema({
-    UserName:String,
+    userName:String,
     email: String,
+    role: String,
+    password: String,
     isDeleted: false,
-    password: String
 }, {
     timestamps: true,
     versionKey: false

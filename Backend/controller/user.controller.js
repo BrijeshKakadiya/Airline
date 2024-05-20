@@ -21,8 +21,9 @@ exports.createUser = (req, res) => {
                 } else {
                     commonService.encryptPassword(req.body.password, (newPassword) => {
                         const user = {
-                            userName: req.body.firstName ? req.body.firstName : '',
+                            userName: req.body.userName ? req.body.userName : '',
                             email: req.body.email ? req.body.email : '',
+                            role: req.body.role ? req.body.role : '',
                             isDeleted: false,
                             password: newPassword
                         };
@@ -78,3 +79,58 @@ exports.login = (req, res) => {
             });
     }
 }
+
+/*
+TODO: GET
+Topic: get all users
+*/
+
+exports.findAllUser = (req, res) => {
+    User.find({ isDeleted: false })
+        .then(user => {
+            if (!user || user <= 0) {
+                res.json({
+                    status: CONSTANT.FAIL,
+                    message: CONSTANT.COLLECTION.USER + CONSTANT.MESSAGE.NOT_FOUND
+                });
+            } else {
+                res.json({
+                    status: CONSTANT.SUCCESS,
+                    message:
+                        CONSTANT.COLLECTION.USER + CONSTANT.MESSAGE.FOUND_SUCCESSFULLY,
+                    data: user
+                });
+            }
+        })
+        .catch(err => {
+            res.send({
+                status: CONSTANT.FAIL,
+                message: err.message || CONSTANT.MESSAGE.ERROR_OCCURRED
+            });
+        });
+};
+
+
+/*
+TODO: POST
+Topic: delete user by id
+*/
+exports.deleteUser = (req, res) => {
+    const Id = req.params.Id;
+    User.findByIdAndUpdate(
+        Id,
+        { $set: { isDeleted: true } },
+        { new: false },
+        function (err, result) {
+            if (err) {
+                res.send({ status: CONSTANT.ERROR, message: err });
+            }
+            res.send({
+                status: CONSTANT.SUCCESS,
+                message:
+                    CONSTANT.COLLECTION.USER + CONSTANT.MESSAGE.DELETE_SUCCESSFULLY
+            });
+        }
+    );
+
+};
