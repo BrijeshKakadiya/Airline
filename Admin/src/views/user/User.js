@@ -26,6 +26,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilDelete } from '@coreui/icons'
+import { registerUser, getAllUser } from '../../../provider/services/user.service'
 
 const User = () => {
 
@@ -33,6 +34,7 @@ const User = () => {
   const [newUserRole, setNewUserRole] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+  const [allUserData, setAllUserData] = useState([]);
 
   const object = [
     {
@@ -43,13 +45,29 @@ const User = () => {
   ]
 
   const onDropdownSelected = (e) => {
-    // console.log("THE VAL", e);
     setNewUserRole(e)
+  }
 
+  const onSubmitForm = () => {
+    let obj = {
+      userName: userName,
+      email: email,
+      role: newUserRole,
+    };
+    registerUser(obj);
+    getAllUserData();
+    setVisible(!visible);
+    setNewUserRole("");
+    setUserName("");
+    setEmail("");
+  };
+
+  const getAllUserData = () => {
+    let data = getAllUser();
+    setAllUserData(data.data);
   }
 
   const onChange = (event) => {
-    // console.log("event", event);
     const name = event.target.name;
     const value = event.target.value;
     if (name === "email") {
@@ -111,7 +129,7 @@ const User = () => {
                     </CDropdown>
                   </CCol>
                   <CCol xs="auto" className="mt-47px">
-                    <CButton color="primary" onClick={() => setVisible(!visible)}>Submit</CButton>
+                    <CButton color="primary" onClick={onSubmitForm}>Submit</CButton>
                   </CCol>
                 </CForm>
               </CModalBody>
@@ -132,7 +150,7 @@ const User = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {object.map((item, index) => (
+                  {allUserData && allUserData.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
                         <div>{item.userName}</div>

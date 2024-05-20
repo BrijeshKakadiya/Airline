@@ -8,6 +8,7 @@ function registerUser(data) {
         return res
     })
 }
+
 function loginUser(data) {
     var url = BASE_URL + environment.USER_LOGIN;
     return handler.Post(url, data).then(res => {

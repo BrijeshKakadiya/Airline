@@ -1,4 +1,3 @@
-import { Constant } from "../services/common/constant"
 import { BASE_URL, environment } from '../../environment/environment';
 import { handler } from "../services/index"
 
@@ -33,7 +32,7 @@ const getAllUser = async () => {
     })
 }
 
-export  {
+export {
     registerUser,
     loginUser,
     getAllUser,

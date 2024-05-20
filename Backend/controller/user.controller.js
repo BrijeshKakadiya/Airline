@@ -1,4 +1,4 @@
-const User = require("../module/user.muldule");
+const User = require("../module/user.module");
 const commonService = require('../common/common');
 const jwt = require('jsonwebtoken');
 const CONSTANT = require('../common/constant');
@@ -9,7 +9,7 @@ TYPE: POST
 DETAILS: To create new User
 */
 exports.createUser = (req, res) => {
-    if (!req.body.userName || !req.body.email || !req.body.password) {
+    if (!req.body.userName || !req.body.email) {
         res.json({ status: CONSTANT.FAIL, message: CONSTANT.MESSAGE.REQUIRED_FIELDS_MISSING });
     } else if (!commonService.isValidateEmail(req.body.email)) {
         res.json({ status: CONSTANT.FAIL, message: CONSTANT.MESSAGE.INVALID_EMAIL });
@@ -19,7 +19,7 @@ exports.createUser = (req, res) => {
                 if (user) {
                     res.json({ status: CONSTANT.FAIL, message: "User already exists with same email!" });
                 } else {
-                    commonService.encryptPassword(req.body.password, (newPassword) => {
+                    commonService.encryptPassword(req.body.password ? req.body.password : "", (newPassword) => {
                         const user = {
                             userName: req.body.userName ? req.body.userName : '',
                             email: req.body.email ? req.body.email : '',
