@@ -18,6 +18,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 const AircraftOne = React.lazy(() => import('./views/pages/aircraftOne/aircraftOne'))
 const AircraftTwo = React.lazy(() => import('./views/pages/aircraftTwo/aircraftTwo'))
+const Bookings = React.lazy(() => import('./views/pages/bookings/bookings'))
 
 const App = () => {
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="*" name="Home" element={<DefaultLayout />} />
           <Route exact path="/aircraftOne" name="aircraft One" element={<AircraftOne />} />
           <Route exact path="/aircraftTwo" name="aircraft One" element={<AircraftTwo />} />
+          <Route exact path="/bookings" name="bookings" element={<Bookings />} />
         </Routes>
       </Suspense>
     </HashRouter>

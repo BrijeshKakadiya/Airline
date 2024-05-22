@@ -12,9 +12,12 @@ import {
     CModalTitle,
     CModalFooter,
     CForm,
-    CFormCheck
+    CFormCheck,
+    CTooltip,
+    CLink
 } from '@coreui/react'
 import { toast } from 'react-toastify';
+import { AppHeader } from '../../../components'
 
 let arr = [];
 const lockedSeats = []; //Fire seat 
@@ -104,6 +107,8 @@ const aircraftOne = () => {
     // };
 
     return (
+        <>
+        <AppHeader />
         <CCard>
             <CCardBody>
                 <CRow>
@@ -139,7 +144,11 @@ const aircraftOne = () => {
                                     {seats1_3.map(seat => (
                                         <CCol xs={3} className='justify-content-center curson-context-menu'>
                                             <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
-                                                <div className={`seat first-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>{seat}</div>
+                                                <div className={`seat first-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£1020">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip>
+                                                </div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -158,7 +167,11 @@ const aircraftOne = () => {
                                     {seats4_7.map(seat => (
                                         <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
                                             <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
-                                                <div className={`seat business-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>{seat}</div>
+                                                <div className={`seat business-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>
+                                                    <CTooltip content="£850">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip>
+                                                </div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -183,7 +196,11 @@ const aircraftOne = () => {
                                     {seats8_19.map(seat => (
                                         <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
                                             <div key={seat} className={`d-flex justify-content-center ${lockedSeats.includes(seat) ? 'locked' : ''}`} onClick={() => selectSeat(seat)}>
-                                                <div className={`seat economy-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>{seat}</div>
+                                                <div className={`seat economy-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>
+                                                    <CTooltip content="£618">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip>
+                                                </div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -192,7 +209,11 @@ const aircraftOne = () => {
                                     {seats20.map(seat => (
                                         <CCol xs={3} className='justify-content-center --cui-gutter-x curson-context-menu'>
                                             <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
-                                                <div className={`seat economy-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>{seat}</div>
+                                                <div className={`seat economy-class d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : ''}`}>
+                                                    <CTooltip content="£618">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip>
+                                                </div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -268,14 +289,16 @@ const aircraftOne = () => {
                                     </CForm>
                                 ))}
                                 <CModalFooter>
-                                    <CButton color="primary" onClick={handleSubmit}>Submit</CButton>
+                                    <CButton color="primary" onClick={handleSubmit} href='/#/bookings'>Submit</CButton>
                                     <CButton color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
                                 </CModalFooter>
                             </CModalBody>
-                        </CModal></CCol>
+                        </CModal>
+                        </CCol>
                 </CRow>
             </CCardBody>
         </CCard>
+        </>
     );
 };
 

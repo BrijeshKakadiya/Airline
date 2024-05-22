@@ -47,18 +47,105 @@
 
 // export default aircraftTwo;
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
+    CButton,
     CCard,
     CCardBody,
     CCol,
+    CFormInput,
+    CModalBody,
     CRow,
+    CModal,
+    CModalHeader,
+    CModalTitle,
+    CModalFooter,
+    CForm,
+    CFormCheck,
+    CTooltip,
+    CLink,
     CAvatar,
 } from '@coreui/react'
 import spoonFork from '../../../assets/images/avatars/spoon-fork.png';
+import { toast } from 'react-toastify';
+import { AppHeader } from '../../../components'
+
+let arr = [];
+const lockedSeats = []; //Fire seat
 
 const aircraftTwo = () => {
-    return (
+
+    const [selectedSeat, setSelectedSeat] = useState([]);
+    const [visible, setVisible] = useState(false);
+    const [formData, setFormData] = useState([]);
+    const [check, setCheck] = useState(false);
+    const [lockClick, setLockClick] = useState(false);
+
+    const seats1_4 = ['1A', '1B', '1C', '1D', '2A', '2B', '2C', '2D', '3A', '3B', '3C', '3D', '4A', '4B', '4C', '4D'];
+
+    const seats5_7 = ['5A', '5B', '5C', '5D', '5E', '5F', '6A', '6B', '6C', '6D', '6E', '6F', '7A', '7B', '7C', '7D', '7E', '7F'];
+
+    const seats8_10 = ['8A', '8B', '8C', '8D', '8E', '8F', '9A', '9B', '9C', '9D', '9E', '9F', '10A', '10B', '10C', '10D', '10E', '10F'];
+
+    const seats11_27 = ['11A', '11B', '11C', '11D', '11E', '11F', '12A', '12B', '12C', '12D', '12E', '12F', '13A', '13B', '13C', '13D', '13E', '13F', '14A', '14B', '14C', '14D', '14E', '14F', '15A', '15B', '15C', '15D', '15E', '15F', '16A', '16B', '16C', '16D', '16E', '16F', '17A', '17B', '17C', '17D', '17E', '17F', '18A', '18B', '18C', '18D', '18E', '18F', '19A', '19B', '19C', '19D', '19E', '19F', '20A', '20B', '20C', '20D', '20E', '20F', '21A', '21B', '21C', '21D', '21E', '21F', '22A', '22B', '22C', '22D', '22E', '22F', '23A', '23B', '23C', '23D', '23E', '23F', '24A', '24B', '24C', '24D', '24E', '24F', '25A', '25B', '25C', '25D', '25E', '25F', '26A', '26B', '26C', '26D', '26E', '26F', '27A', '27B', '27C', '27D', '27E', '27F']
+
+    const checkClick = () => {
+        setCheck(true);
+        lockedSeats.push('16A', '16B', '16C', '16D', '16E', '16F');
+    }
+
+    const handleBookSeats = () => {
+        setFormData(selectedSeat.map(seat => ({ selectSeat, userName: '', email: '', age: '' })));
+        setVisible(true);
+    };
+
+    const handleInputChange = (index, field, value) => {
+        const newFormData = [...formData];
+        newFormData[index][field] = value;
+        setFormData(newFormData);
+    };
+
+    const handleSubmit = () => {
+        setVisible(false);
+        setSelectedSeat([]);
+        toast.success("Ticket booked successfully.");
+        // Add your form submission logic here
+    };
+
+    const onLockSeat = () => {
+        // setSelectedSeat([]);
+        toast.success("Seat Lock successfully.");
+        // Add your form submission logic here
+    };
+
+    const onUnLockSeat = () => {
+        setSelectedSeat([]);
+        toast.success("Seat Unlock successfully.");
+        // Add your form submission logic here
+    };
+
+    const selectSeat = (seat) => {
+        arr.push(seat)
+        console.log("seat", seat);
+        setSelectedSeat(prevSelectedSeats => {
+            if (prevSelectedSeats.includes(seat)) {
+                return prevSelectedSeats.filter(s => s !== seat);
+            } else {
+                if (prevSelectedSeats.length < 6) {
+                    return [...prevSelectedSeats, seat];
+                } else {
+                    alert('You can only book up to 6 seats once time. || if you book more seats first complete 6 seats booking');
+                    return prevSelectedSeats;
+                }
+            }
+        });
+    };
+
+
+
+
+    return (<>
+        <AppHeader />
         <CCard>
             <CCardBody>
                 <CRow>
@@ -68,9 +155,14 @@ const aircraftTwo = () => {
                     <CCol xs={4}><div className='p-9-5 fw-bolder'>Fri, May 31, 2024 || London - Heathrow Apt to Washington-Dulles Apt </div></CCol>
                 </CRow>
                 <CRow>
+                    <CCol xs={5}></CCol>
+                    <CCol xs={4}><CFormCheck className='checkbox' id="flexCheckDefault" label="Avoid seats near the fire exit." onChange={checkClick} defaultChecked={check} /></CCol>
+                    <CCol xs={3}></CCol>
+                </CRow>
+                <CRow>
                     <CCol xs={2}></CCol>
                     <CCol xs={2}>
-                        <div className='box w-70'>
+                        {/* <div className='box w-70'>
                             <div className='d-flex justify-content-center fw-bolder'>
                                 Legend
                             </div>
@@ -79,7 +171,7 @@ const aircraftTwo = () => {
                                 <li>Business class</li>
                                 <li>Economy class</li>
                             </ul>
-                        </div>
+                        </div> */}
                     </CCol>
                     <CCol xs={4}>
                         <CRow>
@@ -119,37 +211,16 @@ const aircraftTwo = () => {
                                     </CCol>
                                 </CRow>
                                 <CRow>
-                                    {['1A', '1B', '1C', '1D'].map(seat => (
-                                        <CCol xs={3} className='justify-content-center'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat-2 first-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
+                                    <CCol xs={12} className='fs-12px d-flex justify-content-center'>(First class)</CCol>
                                 </CRow>
                                 <CRow>
-                                    {['2A', '2B', '2C', '2D'].map(seat => (
-                                        <CCol xs={3} className='justify-content-center'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat-2 first-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['3A', '3B', '3C', '3D'].map(seat => (
-                                        <CCol xs={3} className='justify-content-center'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat-2 first-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['4A', '4B', '4C', '4D'].map(seat => (
-                                        <CCol xs={3} className='justify-content-center'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat-2 first-class d-flex justify-content-center">{seat}</div>
+                                    {seats1_4.map(seat => (
+                                        <CCol xs={3} className='justify-content-center curson-context-menu'>
+                                            <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
+                                                <div className={`seat-2 first-class1 d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£2257">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip></div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -157,216 +228,48 @@ const aircraftTwo = () => {
                                 <CRow>
                                     <CCol xs={12} className='fs-12px'>
                                         <div className='d-flex align-items-center'>
-                                            <hr className='w-28' /><span className='p-6px'> DELTA COMFORT+ </span><hr className='w-28'/>
+                                            <hr className='w-28' /><span className='p-6px'> DELTA COMFORT+ </span><hr className='w-28' />
                                         </div>
                                     </CCol>
                                 </CRow>
                                 <CRow>
-                                    {['5A', '5B', '5C', '5D', '5E', '5F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
+                                    {seats5_7.map(seat => (
+                                        <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
+                                            <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
+                                                <div className={`seat business-class1 d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£1840">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip></div>
                                             </div>
                                         </CCol>
                                     ))}
                                 </CRow>
                                 <CRow>
-                                    {['6A', '6B', '6C', '6D', '6E', '6F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['7A', '7B', '7C', '7D', '7E', '7F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    <CCol xs={12} className='fs-10px d-flex justify-content-center'>MAIN CABIN</CCol>
-                                </CRow>
-                                <CRow>
-                                    {['8A', '8B', '8C', '8D', '8E', '8F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['9A', '9B', '9C', '9D', '9E', '9F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
+                                    <CCol xs={12} className='fs-12px d-flex justify-content-center'>MAIN CABIN (Business class)</CCol>
                                 </CRow>
                                 <CRow className='mb-1rem'>
-                                    {['10A', '10B', '10C', '10D', '10E', '10F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat business-class d-flex justify-content-center">{seat}</div>
+                                    {seats8_10.map(seat => (
+                                        <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
+                                            <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
+                                                <div className={`seat business-class1 d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£1840">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip></div>
                                             </div>
                                         </CCol>
                                     ))}
                                 </CRow>
                                 <CRow>
-                                    {['11A', '11B', '11C', '11D', '11E', '11F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
+                                    <CCol xs={12} className='fs-12px d-flex justify-content-center'>(Economy class)</CCol>
                                 </CRow>
                                 <CRow>
-                                    {['12A', '12B', '12C', '12D', '12E', '12F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['13A', '13B', '13C', '13D', '13E', '13F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['14A', '14B', '14C', '14D', '14E', '14F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['15A', '15B', '15C', '15D', '15E', '15F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['16A', '16B', '16C', '16D', '16E', '16F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['17A', '17B', '17C', '17D', '17E', '17F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['18A', '18B', '18C', '18D', '18E', '18F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['19A', '19B', '19C', '19D', '19E', '19F'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['20A', '20B', '20C', '20D', '20E', '20f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['21A', '21B', '21C', '21D', '21E', '21f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['22A', '22B', '22C', '22D', '22E', '22f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['23A', '23B', '23C', '23D', '23E', '23f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['24A', '24B', '24C', '24D', '24E', '24f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['25A', '25B', '25C', '25D', '25E', '25f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['26A', '26B', '26C', '26D', '26E', '26f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
-                                            </div>
-                                        </CCol>
-                                    ))}
-                                </CRow>
-                                <CRow>
-                                    {['27A', '27B', '27C', '27D', '27E', '27f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
+                                    {seats11_27.map(seat => (
+                                        <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
+                                            <div key={seat} className={`d-flex justify-content-center ${lockedSeats.includes(seat) ? 'locked' : ''}`} onClick={() => selectSeat(seat)}>
+                                                <div className={`seat economy-class1 d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£1610">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip></div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -376,9 +279,12 @@ const aircraftTwo = () => {
                                         <div className='h-100 box-3'></div>
                                     </CCol>
                                     {['28D', '28E', '28f'].map(seat => (
-                                        <CCol xs={2} className='justify-content-center --cui-gutter-x'>
-                                            <div key={seat} className='d-flex justify-content-center'>
-                                                <div className="seat economy-class d-flex justify-content-center">{seat}</div>
+                                        <CCol xs={2} className='justify-content-center --cui-gutter-x curson-context-menu'>
+                                            <div key={seat} className='d-flex justify-content-center' onClick={() => selectSeat(seat)}>
+                                                <div className={`seat economy-class1 d-flex justify-content-center ${selectedSeat.includes(seat) ? 'selected' : '' || selectedSeat.includes(seat) && lockClick ? 'locked' : ''}`}>
+                                                    <CTooltip content="£1610">
+                                                        <CLink className='text-decoration-none text-white'>{seat}</CLink>
+                                                    </CTooltip></div>
                                             </div>
                                         </CCol>
                                     ))}
@@ -418,10 +324,68 @@ const aircraftTwo = () => {
                             <CCol xs={3}></CCol>
                         </CRow>
                     </CCol>
-                    <CCol xs={4}></CCol>
+                    <CCol xs={2}></CCol>
+                    <CCol xs={2}>
+                        <CButton color="primary" size='lg' onClick={handleBookSeats} disabled={selectedSeat.length === 0}>Book</CButton> <br /> 
+                        {/* seat lock */}
+                        {/* <CButton color="primary" size='lg' className='mt-5px' disabled={selectedSeat.length === 0} onClick={onLockSeat}>
+                            Lock
+                        </CButton>
+                        <CButton color="secondary" size='lg' className='mt-5px ml-8px' disabled={selectedSeat.length === 0} onClick={onUnLockSeat}>
+                            UnLock
+                        </CButton> */}
+                        {/* seat lock */}
+                        <CModal
+                            size="lg"
+                            visible={visible}
+                            onClose={() => setVisible(false)}
+                            aria-labelledby="OptionalSizesExample2"
+                        >
+                            <CModalHeader>
+                                <CModalTitle id="OptionalSizesExample2">Booking Detail</CModalTitle>
+                            </CModalHeader>
+                            <CModalBody>
+                                {formData.map((data, index) => (
+                                    <CForm className="row g-3">
+                                        <CCol xs="auto">
+                                            <CFormInput
+                                                label="UserName"
+                                                id={`userName-${index}`}
+                                                value={data.userName}
+                                                onChange={(e) => handleInputChange(index, 'userName', e.target.value)}
+                                            />
+                                        </CCol>
+                                        <CCol xs={4}>
+                                            <CFormInput
+                                                label="Email address"
+                                                type="email"
+                                                id={`email-${index}`}
+                                                value={data.email}
+                                                onChange={(e) => handleInputChange(index, 'email', e.target.value)}
+                                            />
+                                        </CCol>
+                                        <CCol xs={4}>
+                                            <CFormInput
+                                                label="age"
+                                                type="number"
+                                                id={`age-${index}`}
+                                                value={data.age}
+                                                onChange={(e) => handleInputChange(index, 'age', e.target.value)}
+                                            />
+                                        </CCol>
+                                    </CForm>
+                                ))}
+                                <CModalFooter>
+                                    <CButton color="primary" onClick={handleSubmit} href='/#/bookings'>Submit</CButton>
+                                    <CButton color="secondary" onClick={() => setVisible(false)}>Cancel</CButton>
+                                </CModalFooter>
+                            </CModalBody>
+                        </CModal>
+                    </CCol>
                 </CRow>
             </CCardBody>
         </CCard>
+    </>
     );
 };
 

@@ -2,6 +2,9 @@
 .fs-16px {
     font-size: 16px !important;
 }
+.fs-18px {
+    font-size: 18px !important;
+}
 
 .fs-14px {
     font-size: 14px !important;
@@ -17,6 +20,10 @@
 
 .ml-8px {
     margin-left: 8px;
+}
+
+.m-3rem {
+    margin: 3rem !important;
 }
 
 .m-0 {
@@ -189,15 +196,34 @@
     cursor: context-menu;
 }
 
-.seat.selected {
+.seat-2.selected {
     background-color: #939393; /* Change this color to whatever you prefer */
     color: white; /* Optional: change text color for selected seat */
 }
 
+.seat.selected {
+    background-color: #939393; /* Change this color to whatever you prefer */
+    color: white; /* Optional: change text color for selected seat */
+}
+.text-decoration-none {
+    text-decoration: none !important;
+}
+.text-white {
+    color: #fff !important;
+}
+.table > tbody {
+    text-align: center !important;
+}
+.display-ruby-text {
+    display: ruby-text;
+}
 // 
 
 .seating-chart {
-    text-align: center;
+    text-align: center !important;
+}
+.text-align-center {
+    text-align: center !important;
 }
 
 .seat-2 {
@@ -231,6 +257,20 @@
 
 .economy-class {
     background-color: #3fb8b9;
+    /* Bootstrap info color */
+}
+
+.first-class1 {
+    background-color: #000000;
+}
+
+.business-class1 {
+    background-color: #ccbc1e;
+    /* Bootstrap warning color */
+}
+
+.economy-class1 {
+    background-color: #accfcf;
     /* Bootstrap info color */
 }
 
