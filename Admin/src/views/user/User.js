@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   CButton,
@@ -36,13 +36,12 @@ const User = () => {
   const [email, setEmail] = useState("");
   const [allUserData, setAllUserData] = useState([]);
 
-  const object = [
-    {
-      userName: "abc",
-      email: "abc@gmail.com",
-      role: "admin",
+  useEffect(async () => {
+    const fetchData = async () => {
+      await getAllUserData();
     }
-  ]
+    fetchData();
+  }, [])
 
   const onDropdownSelected = (e) => {
     setNewUserRole(e)
@@ -62,8 +61,8 @@ const User = () => {
     setEmail("");
   };
 
-  const getAllUserData = () => {
-    let data = getAllUser();
+  const getAllUserData = async () => {
+    let data = await getAllUser();
     setAllUserData(data.data);
   }
 
@@ -150,24 +149,26 @@ const User = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {allUserData && allUserData.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      <CTableDataCell>
-                        <div>{item.userName}</div>
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        <div>{item.email}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex justify-content-between text-nowrap">
-                          <div className="fw-semibold">{item.role}</div>
-                        </div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <CIcon icon={cilDelete} className='color-red' />
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                  {allUserData && allUserData.map((item, index) => {
+                    return (
+                      <CTableRow v-for="item in tableItems" key={index}>
+                        <CTableDataCell>
+                          <div>{item.userName}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.email}</div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex justify-content-between text-nowrap">
+                            <div className="fw-semibold">{item.role}</div>
+                          </div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <CIcon icon={cilDelete} className='color-red' />
+                        </CTableDataCell>
+                      </CTableRow>
+                    )
+                  })}
                 </CTableBody>
               </CTable>
             </CCardBody>

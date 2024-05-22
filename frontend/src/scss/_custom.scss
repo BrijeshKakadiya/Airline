@@ -71,7 +71,9 @@
 .w-28 {
     width: 28% !important;
 }
-
+.checkbox input {
+    border: 1px solid #000;
+}
 .box {
     border: 2px solid #000;
     border-radius: 12px;
@@ -164,6 +166,12 @@
     margin-top: 10px !important;
 }
 
+.locked {
+    pointer-events: none; /* Prevent clicking */
+    background-color: #656565; /* Change this color to indicate locked seats */
+    color: white; /* Optional: change text color for locked seat */
+}
+
 /* custom styles */
 .a li:first-child::marker {
     color: #3278ca;
@@ -177,6 +185,14 @@
     color: #3fb8b9;
 }
 
+.curson-context-menu {
+    cursor: context-menu;
+}
+
+.seat.selected {
+    background-color: #939393; /* Change this color to whatever you prefer */
+    color: white; /* Optional: change text color for selected seat */
+}
 
 // 
 

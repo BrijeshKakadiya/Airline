@@ -97,6 +97,7 @@ const Register = () => {
                   <div className="d-grid">
                     <CButton color="success" onClick={onSubmit} href='/#/login'>Create Account</CButton>
                   </div>
+                  <div className='d-flex justify-content-end'>Already register? <a href='/#/login'>Login here</a></div>
                 </CForm>
               </CCardBody>
             </CCard>
