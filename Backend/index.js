@@ -8,6 +8,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 let User = require('./route/user.route')
+let Flight = require('./route/flight.route')
+let Booking = require('./route/booking.route')
 
 //create express app
 var http = require('http');
@@ -43,6 +45,8 @@ mongoose.connect(database.DB, {
 );
 
 app.use('/user', User);
+app.use('/flight', Flight);
+app.use('/booking', Booking);
 
 
 server = app.listen(PORT, '0.0.0.0', function() {

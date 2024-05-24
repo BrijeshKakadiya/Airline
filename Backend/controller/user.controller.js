@@ -124,12 +124,13 @@ exports.deleteUser = (req, res) => {
         function (err, result) {
             if (err) {
                 res.send({ status: CONSTANT.ERROR, message: err });
+            } else {
+                res.send({
+                    status: CONSTANT.SUCCESS,
+                    message:
+                        CONSTANT.COLLECTION.USER + CONSTANT.MESSAGE.DELETE_SUCCESSFULLY
+                });
             }
-            res.send({
-                status: CONSTANT.SUCCESS,
-                message:
-                    CONSTANT.COLLECTION.USER + CONSTANT.MESSAGE.DELETE_SUCCESSFULLY
-            });
         }
     );
 

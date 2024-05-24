@@ -17,6 +17,7 @@ import {
     CTableRow,
 } from '@coreui/react'
 import { AppHeader } from '../../../components'
+import { toast } from 'react-toastify';
 
 const Bookings = () => {
 
@@ -24,7 +25,7 @@ const Bookings = () => {
     const [visibleQuestion, setVisibleQuestion] = useState(false);
 
     let obj = [
-        { userName: "David", email: "david@gmail.com", age: "45", seatNo: "5A", totalAmount: "£850", status: "paid" },
+        { userName: "Devid", email: "devid@gmail.com", age: "45", seatNo: "5A", totalAmount: "£850", status: "paid" },
         { userName: "Man", email: "man@gmail.com", age: "14", seatNo: "5B", totalAmount: "£850 - (25% Discount) = £637.5", status: "paid" },
         { userName: "Zack", email: "zack@gmail.com", age: "21", seatNo: "5C", totalAmount: "£850", status: "paid" }
     ]
@@ -42,24 +43,7 @@ const Bookings = () => {
         const newTickets = tickets.filter((_, i) => i !== index);
         setTickets(newTickets);
         setVisibleQuestion(false);
-    };
-
-    const onSubmitForm = () => {
-        setVisible(!visible);
-        setNewUserRole("");
-        setUserName("");
-        setEmail("");
-    };
-
-    const onChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        if (name === "email") {
-            setEmail(value);
-        }
-        if (name === "userName") {
-            setUserName(value);
-        }
+        toast.success("Booking Cancel successfully!")   
     };
 
     return (
@@ -117,7 +101,7 @@ const Bookings = () => {
                                                     <div>{item.status}</div>
                                                 </CTableDataCell>
                                                 <CTableDataCell className="text-center">
-                                                    <CButton color="danger text-white" onClick={() => setVisibleQuestion(true)}>Cancle</CButton>
+                                                    <CButton color="danger text-white" onClick={() => setVisibleQuestion(true)}>Cancel</CButton>
                                                     <CModal
                                                         size="sm"
                                                         visible={visibleQuestion}
@@ -141,6 +125,7 @@ const Bookings = () => {
                                     })}
                                 </CTableBody>
                             </CTable>
+                                    <div className='mt-1rem c-red'>Note: Ticket cannot be cancelled when 72 hours or less left to the departure.</div>
                         </CCardBody>
                     </CCard>
                 </CCol>

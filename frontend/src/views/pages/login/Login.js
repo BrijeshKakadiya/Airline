@@ -16,6 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { loginUser } from '../../../../provider/services/user.service'
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -30,6 +31,7 @@ const Login = () => {
     localStorage.setItem(Constant.SESSION_DATA, JSON.stringify(obj));
     localStorage.setItem(Constant.JWT_TOKEN, "Basic token-553174123112123141");
     loginUser(obj);
+    toast.success("Login Succeccfully!")
   };
 
   const onChange = (event) => {

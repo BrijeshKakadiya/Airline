@@ -18,7 +18,6 @@ function loginUser(data) {
 }
 
 const deleteUserById = async (id) => {
-    console.log("id => ", id);
     var url = BASE_URL + environment.DELETE_USER_BY_ID + id;
     return handler.Post(url).then(res => {
         return res

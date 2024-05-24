@@ -6,7 +6,7 @@ import { CNavGroup, CNavItem } from '@coreui/react'
 const _nav = [
   {
     component: CNavItem,
-    name: 'User',
+    name: 'Users',
     to: '/user',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
@@ -21,19 +21,6 @@ const _nav = [
     name: 'Flights',
     to: '/flights',
     icon: <CIcon icon={cilFlightTakeoff} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavGroup,
-    name: 'Buttons',
-    to: '/buttons',
-    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Buttons',
-        to: '/buttons/buttons',
-      },
-    ],
   },
 ]
 

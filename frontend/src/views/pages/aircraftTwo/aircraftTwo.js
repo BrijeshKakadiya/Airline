@@ -1,52 +1,3 @@
-// import React from 'react';
-// // import './SeatingChart.css'; // Import custom CSS for additional styling
-
-// const aircraftTwo = () => {
-//   const generateSeats = (rows, cols, className) => {
-//     const seatArray = [];
-//     for (let row = 1; row <= rows; row++) {
-//       const seatRow = [];
-//       for (let col = 1; col <= cols; col++) {
-//         seatRow.push(
-//           <div key={`${row}-${col}`} className={`seat ${className}`}>
-//             {row}{String.fromCharCode(64 + col)}
-//           </div>
-//         );
-//       }
-//       seatArray.push(
-//         <div key={row} className="row justify-content-center mb-2">
-//           {seatRow}
-//         </div>
-//       );
-//     }
-//     return seatArray;
-//   };
-
-//   return (
-//     <div className="container mt-4">
-//       <h2>Aircraft 2:</h2>
-//       <div className="seating-chart">
-//         {/* First Class Section */}
-//         <div className="section">
-//           {generateSeats(4, 4, 'first-class')}
-//         </div>
-
-//         {/* Business Class Section */}
-//         <div className="section">
-//           {generateSeats(10, 6, 'business-class')}
-//         </div>
-
-//         {/* Economy Class Section */}
-//         <div className="section">
-//           {generateSeats(19, 6, 'economy-class')}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default aircraftTwo;
-
 import React, { useState } from 'react';
 import {
     CButton,
@@ -65,6 +16,10 @@ import {
     CTooltip,
     CLink,
     CAvatar,
+    CDropdown,
+    CDropdownToggle,
+    CDropdownMenu,
+    CDropdownItem,
 } from '@coreui/react'
 import spoonFork from '../../../assets/images/avatars/spoon-fork.png';
 import { toast } from 'react-toastify';
@@ -80,6 +35,9 @@ const aircraftTwo = () => {
     const [formData, setFormData] = useState([]);
     const [check, setCheck] = useState(false);
     const [lockClick, setLockClick] = useState(false);
+    const [newSeatClass, setNewSeatClass] = useState("");
+    const [passengerCount, setPassengerCount] = useState(2);
+
 
     const seats1_4 = ['1A', '1B', '1C', '1D', '2A', '2B', '2C', '2D', '3A', '3B', '3C', '3D', '4A', '4B', '4C', '4D'];
 
@@ -155,13 +113,13 @@ const aircraftTwo = () => {
                     <CCol xs={4}><div className='p-9-5 fw-bolder'>Fri, May 31, 2024 || London - Heathrow Apt to Washington-Dulles Apt </div></CCol>
                 </CRow>
                 <CRow>
-                    <CCol xs={5}></CCol>
+                    <CCol xs={6}></CCol>
                     <CCol xs={4}><CFormCheck className='checkbox' id="flexCheckDefault" label="Avoid seats near the fire exit." onChange={checkClick} defaultChecked={check} /></CCol>
-                    <CCol xs={3}></CCol>
+                    <CCol xs={2}></CCol>
                 </CRow>
                 <CRow>
                     <CCol xs={2}></CCol>
-                    <CCol xs={2}>
+                    <CCol xs={3}>
                         {/* <div className='box w-70'>
                             <div className='d-flex justify-content-center fw-bolder'>
                                 Legend
@@ -172,6 +130,46 @@ const aircraftTwo = () => {
                                 <li>Economy class</li>
                             </ul>
                         </div> */}
+                        <CRow className='mt-10rem'>
+                            <div>Let's book the seats and enjoy travel smoothly!</div>
+                        </CRow>
+                        <CRow>
+                            <CRow>
+                                <CDropdown>
+                                    <CDropdownToggle color="secondary">{newSeatClass == "" ? "Select Class" : newSeatClass}</CDropdownToggle>
+                                    <CDropdownMenu>
+                                        <CDropdownItem onClick={() => setNewSeatClass("First Class")} value="First Class">First Class</CDropdownItem>
+                                        <CDropdownItem onClick={() => setNewSeatClass("Business Class")} value="Business Class">Business Class</CDropdownItem>
+                                        <CDropdownItem onClick={() => setNewSeatClass("Economy Class")} value="Economy Class">Economy Class</CDropdownItem>
+                                    </CDropdownMenu>
+                                </CDropdown>
+                            </CRow>
+                            <CRow className='mt-1rem'>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <label style={{ marginRight: 10 }}>
+                                        Passenger
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={passengerCount}
+                                        onChange={(e) => setPassengerCount(Number(e.target.value))}
+                                        style={{ textAlign: 'center', width: 50 }}
+                                        max={6}
+                                    />
+                                </div>
+                                <div className='mt-12px text-bold'>
+                                    Do you want to book our dynamic allocation seats? <br />
+                                    To get best in class experience
+                                </div>
+                                <CRow>
+                                    <CCol xs={12}>
+                                        <CButton color="secondary" size='lg' className='mt-5px ml-8px'>
+                                            Auto allocation
+                                        </CButton>
+                                    </CCol>
+                                </CRow>
+                            </CRow>
+                        </CRow>
                     </CCol>
                     <CCol xs={4}>
                         <CRow>
@@ -326,7 +324,7 @@ const aircraftTwo = () => {
                     </CCol>
                     <CCol xs={2}></CCol>
                     <CCol xs={2}>
-                        <CButton color="primary" size='lg' onClick={handleBookSeats} disabled={selectedSeat.length === 0}>Book</CButton> <br /> 
+                        <CButton color="primary" size='lg' onClick={handleBookSeats} disabled={selectedSeat.length === 0}>Book</CButton> <br />
                         {/* seat lock */}
                         {/* <CButton color="primary" size='lg' className='mt-5px' disabled={selectedSeat.length === 0} onClick={onLockSeat}>
                             Lock

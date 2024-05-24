@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   CButton,
@@ -6,7 +6,9 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CProgress,
+  CModal,
+  CModalBody,
+  CModalFooter,
   CRow,
   CTable,
   CTableBody,
@@ -16,157 +18,105 @@ import {
   CTableRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {
-  cibCcAmex,
-  cibCcApplePay,
-  cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
-  cibCcVisa,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
-  cilPeople,
-  cilDelete,
-} from '@coreui/icons'
+import { cilDelete } from '@coreui/icons'
+import { toast } from 'react-toastify'
 
 const Bookings = () => {
 
-  const object = [
-    {
-      userName: "abc",
-      email: "abc@gmail.com",
-      role: "admin",
-    }
+  const obj = [
+    { userName: "Devid", destination: "IND-AUS", email: "devid@gmail.com", seatNo: "5A", dateAndTime: "14:20(New Delhi) - 07:10(Sydney)", age: "45", amount: "£850" },
+    { userName: "Man", destination: "IND-AUS", email: "man@gmail.com", seatNo: "5B", dateAndTime: "14:20(New Delhi) - 07:10(Sydney)", amount: "£850 - (25% Discount) = £637.5", age: "14" },
+    { userName: "Zack", destination: "IND-AUS", email: "zack@gmail.com", seatNo: "5C", dateAndTime: "14:20(New Delhi) - 07:10(Sydney)", amount: "£850", age: "21" },
+    { userName: "Norman", destination: "LHR-IAD", email: "norman@gmail.com", seatNo: "2A", dateAndTime: "12:35(London) - 15:35(Washington)", amount: "£2257", age: "42" },
+    { userName: "Nicky", destination: "LHR-IAD", email: "nicky@gmail.com", seatNo: "2B", dateAndTime: "12:35(London) - 15:35(Washington)", amount: "£2257", age: "43" },
+    { userName: "Vicky", destination: "LHR-IAD", email: "vicky@gmail.com", seatNo: "6A", dateAndTime: "12:35(London) - 15:35(Washington)", amount: "£1840", age: "24" },
+    { userName: "Hayden", destination: "LHR-IAD", email: "hayden@gmail.com", seatNo: "6B", dateAndTime: "12:35(London) - 15:35(Washington)", amount: "£1840 - (25% Discount) = £1380", age: "13" },
   ]
 
-  const tableExample = [
-    {
-      user: {
-        name: 'Yiorgos Avraamu',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'USA', flag: cifUs },
-      usage: {
-        value: 50,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'success',
-      },
-      payment: { name: 'Mastercard', icon: cibCcMastercard },
-      activity: '10 sec ago',
-    },
-    {
-      user: {
-        name: 'Avram Tarasios',
-        new: false,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'Brazil', flag: cifBr },
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'info',
-      },
-      payment: { name: 'Visa', icon: cibCcVisa },
-      activity: '5 minutes ago',
-    },
-    {
-      user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2023' },
-      country: { name: 'India', flag: cifIn },
-      usage: {
-        value: 74,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'warning',
-      },
-      payment: { name: 'Stripe', icon: cibCcStripe },
-      activity: '1 hour ago',
-    },
-    {
-      user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2023' },
-      country: { name: 'France', flag: cifFr },
-      usage: {
-        value: 98,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'danger',
-      },
-      payment: { name: 'PayPal', icon: cibCcPaypal },
-      activity: 'Last month',
-    },
-    {
-      user: {
-        name: 'Agapetus Tadeáš',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'Spain', flag: cifEs },
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'primary',
-      },
-      payment: { name: 'Google Wallet', icon: cibCcApplePay },
-      activity: 'Last week',
-    },
-    {
-      user: {
-        name: 'Friderik Dávid',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'Poland', flag: cifPl },
-      usage: {
-        value: 43,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'success',
-      },
-      payment: { name: 'Amex', icon: cibCcAmex },
-      activity: 'Last week',
-    },
-  ]
+  const [booking, setBooking] = useState(obj);
+  const [visibleQuestion, setVisibleQuestion] = useState(false);
+
+  const handleDelete = (index) => {
+    const newTickets = booking.filter((_, i) => i !== index);
+    setBooking(newTickets);
+    setVisibleQuestion(false);
+    toast.success("Booking Cancel successfully!")
+  };
 
   return (
     <>
       <CRow>
         <CCol xs>
           <CCard className="mb-4">
-            <CCardHeader><CButton color="primary">+ Add User</CButton></CCardHeader>
+            <CCardHeader><CRow>
+              <CCol xs={2}>
+                <CButton className="curson-context-menu text-bold">Bookings</CButton>
+              </CCol>
+            </CRow></CCardHeader>
             <CCardBody>
               <CTable align="middle" className="mb-0 border" hover responsive>
-                <CTableHead className="text-nowrap">
+                <CTableHead className="text-nowrap text-center">
                   <CTableRow>
                     <CTableHeaderCell className="bg-body-tertiary text-center">
-                      UserName
+                      User Name
                     </CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary text-center">
-                      Email
+                      Destination
                     </CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary">Role</CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary">Email</CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary">SeatNo</CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary">age</CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary">Amount</CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary">Date & Time</CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary"></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {object.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      <CTableDataCell>
-                        <div>{item.userName}</div>
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        <div>{item.email}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex justify-content-between text-nowrap">
-                          <div className="fw-semibold">{item.role}</div>
-                        </div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <CIcon icon={cilDelete} className='color-red' />
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                  {booking && booking.map((item, index) => {
+                    return (
+                      <CTableRow v-for="item in tableItems" key={index}>
+                        <CTableDataCell>
+                          <div>{item.userName}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.destination}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.email}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.seatNo}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.age}</div>
+                        </CTableDataCell>
+                        <CTableDataCell className="text-center">
+                          <div>{item.amount}</div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex justify-content-between text-nowrap">
+                            <div className="fw-semibold">{item.dateAndTime}</div>
+                          </div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <CIcon icon={cilDelete} className='color-red' onClick={() => setVisibleQuestion(true)} />
+                        </CTableDataCell>
+                          <CModal
+                            size="sm"
+                            visible={visibleQuestion}
+                            onClose={() => setVisibleQuestion(false)}
+                          >
+                            <CModalBody>
+                              <div className="text-align-center fs-18px">Are you sure you want to cancel your booking?</div>
+                              <CModalFooter className="display-ruby-text">
+                                <CButton color="primary" onClick={() => handleDelete(index)} >Submit</CButton>
+                                <CButton color="secondary" onClick={() => setVisibleQuestion(false)}>Cancel</CButton>
+                              </CModalFooter>
+                            </CModalBody>
+                          </CModal>
+                      </CTableRow>
+                    )
+                  })}
                 </CTableBody>
               </CTable>
             </CCardBody>

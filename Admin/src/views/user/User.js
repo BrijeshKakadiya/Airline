@@ -15,6 +15,7 @@ import {
   CModal,
   CModalBody,
   CModalHeader,
+  CModalFooter,
   CModalTitle,
   CRow,
   CTable,
@@ -26,7 +27,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilDelete } from '@coreui/icons'
-import { registerUser, getAllUser } from '../../../provider/services/user.service'
+import { registerUser, getAllUser, deleteUserById } from '../../../provider/services/user.service'
+import { toast } from 'react-toastify'
 
 const User = () => {
 
@@ -35,13 +37,16 @@ const User = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [allUserData, setAllUserData] = useState([]);
+  const [visibleQuestion, setVisibleQuestion] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
     const fetchData = async () => {
-      await getAllUserData();
-    }
+      let data = await getAllUser();
+      setAllUserData(data.data);
+    };
+
     fetchData();
-  }, [])
+  }, []);
 
   const onDropdownSelected = (e) => {
     setNewUserRole(e)
@@ -59,6 +64,7 @@ const User = () => {
     setNewUserRole("");
     setUserName("");
     setEmail("");
+    toast.success("Addedd Succeccfully!")
   };
 
   const getAllUserData = async () => {
@@ -77,12 +83,31 @@ const User = () => {
     }
   };
 
+
+  const handleDelete = (id) => {
+    deleteUserById(id);
+    // getAllUserData();
+    // setBooking(newTickets);
+    setVisibleQuestion(false);
+    toast.success("Person Remove Succeccfully!")
+  };
+
   return (
     <>
       <CRow>
         <CCol xs>
           <CCard className="mb-4">
-            <CCardHeader><CButton color="primary" onClick={() => setVisible(!visible)}>+ Add User</CButton></CCardHeader>
+            <CCardHeader>
+              <CRow>
+                <CCol xs={2}>
+                  <CButton className="curson-context-menu text-bold">Users</CButton>
+                </CCol>
+                <CCol xs={8}></CCol>
+                <CCol xs={2} className='d-flex justify-content-end'>
+                  <CButton color="primary" onClick={() => setVisible(!visible)}>+ Add User</CButton>
+                </CCol>
+              </CRow>
+            </CCardHeader>
             {/* Model start */}
             <CModal
               size="lg"
@@ -164,8 +189,21 @@ const User = () => {
                           </div>
                         </CTableDataCell>
                         <CTableDataCell>
-                          <CIcon icon={cilDelete} className='color-red' />
+                          <CIcon icon={cilDelete} className='color-red' onClick={() => setVisibleQuestion(true)} />
                         </CTableDataCell>
+                        <CModal
+                          size="sm"
+                          visible={visibleQuestion}
+                          onClose={() => setVisibleQuestion(false)}
+                        >
+                          <CModalBody>
+                            <div className="text-align-center fs-18px">Are you sure you want to cancel your booking?</div>
+                            <CModalFooter className="display-ruby-text">
+                              <CButton color="primary" onClick={() => handleDelete(item._id)} >Submit</CButton>
+                              <CButton color="secondary" onClick={() => setVisibleQuestion(false)}>Cancel</CButton>
+                            </CModalFooter>
+                          </CModalBody>
+                        </CModal>
                       </CTableRow>
                     )
                   })}

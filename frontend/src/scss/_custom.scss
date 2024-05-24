@@ -122,6 +122,12 @@
 .mt-1 {
     margin-top: 1px !important;
 }
+.mt-12px {
+    margin-top: 12px !important;
+}
+.text-bold {
+    font-weight: 600;
+}
 
 .ml-5 {
     margin-left: 5px;
@@ -129,6 +135,10 @@
 
 .mt-1rem {
     margin-top: 1rem !important;
+}
+
+.mt-10rem {
+    margin-top: 10rem !important;
 }
 
 .mb-1rem {
@@ -150,7 +160,7 @@
 }
 
 .c-red {
-    color: #ff0000;
+    color: #ff0000 !important;
 }
 
 .cursor-pointer:hover {
