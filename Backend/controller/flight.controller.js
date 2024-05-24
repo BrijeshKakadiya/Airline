@@ -31,7 +31,6 @@ Topic: get all flights
 exports.findAllFlights = (req, res) => {
     Flight.find({ isDeleted: false })
         .then(flight => {
-            console.log("flight => ", flight)
             if (!flight || flight <= 0) {
                 res.json({
                     status: CONSTANT.FAIL,

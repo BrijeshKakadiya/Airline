@@ -22,7 +22,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilDelete, cilPen } from '@coreui/icons'
 import { createFlight, getAllFlights, deleteFlightById } from '../../../provider/services/flights.service'
 import { toast } from 'react-toastify'
 
@@ -206,6 +206,7 @@ const Flights = () => {
                     <CTableHeaderCell className="bg-body-tertiary">Booking Seats</CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary">Date & Time</CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary"></CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary"></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -228,6 +229,9 @@ const Flights = () => {
                           <div className="d-flex justify-content-between text-nowrap">
                             <div className="fw-semibold">{item.dateAndTime}</div>
                           </div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <CIcon icon={cilPen} onClick={() => setVisible(!visible)} />
                         </CTableDataCell>
                         <CTableDataCell>
                           <CIcon icon={cilDelete} className='color-red' onClick={() => setVisibleQuestion(true)} />

@@ -26,7 +26,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilDelete, cilPen } from '@coreui/icons'
 import { registerUser, getAllUser, deleteUserById } from '../../../provider/services/user.service'
 import { toast } from 'react-toastify'
 
@@ -171,6 +171,7 @@ const User = () => {
                     </CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary">Role</CTableHeaderCell>
                     <CTableHeaderCell className="bg-body-tertiary"></CTableHeaderCell>
+                    <CTableHeaderCell className="bg-body-tertiary"></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -187,6 +188,9 @@ const User = () => {
                           <div className="d-flex justify-content-between text-nowrap">
                             <div className="fw-semibold">{item.role}</div>
                           </div>
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <CIcon icon={cilPen} onClick={() => setVisible(!visible)} />
                         </CTableDataCell>
                         <CTableDataCell>
                           <CIcon icon={cilDelete} className='color-red' onClick={() => setVisibleQuestion(true)} />
